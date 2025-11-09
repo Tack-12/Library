@@ -8,6 +8,15 @@ function Book(title, author, pages, read) {
     read ? this.read = "Already read" : this.read = "Not Read";
 }
 
+Book.prototype.changeStatus = function(){
+    if (this.read == "Already read"){
+        this.read = "Not Read"
+    }
+    else{
+        this.read = "Already read"
+    }
+}
+
 function addBookToLibrary(title, author, pages, read) {
 
     let book = new Book(title, author, pages, read);
@@ -15,6 +24,7 @@ function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(book);
 }
 
+addBookToLibrary("title","auth",12,true)
 
 function displayBooks() {
 
@@ -33,11 +43,23 @@ function displayBooks() {
             card.appendChild(card_author);
             const card_pages = document.createElement("p");
             card.appendChild(card_pages);
+            const card_read = document.createElement("p");
+            card.appendChild(card_read);
+
             const delete_card = document.createElement("button");
             card.appendChild(delete_card);
-            delete_card.innerHTML = `Delete Btn`;
+            delete_card.innerHTML = `Remove Book`;
             delete_card.classList.add("del-btn");
             delete_card.setAttribute("data-id-number", item.id);
+
+            change_readStatus = document.createElement("button");
+            card.appendChild(change_readStatus);
+            change_readStatus.innerHTML="Change Read Status"
+            change_readStatus.addEventListener("click",()=>{
+                item.changeStatus();
+                updateLibrary();
+                console.log(myLibrary);
+            })
 
             delete_card.addEventListener("click", (event) => {
                 deleteBook(event);
@@ -45,7 +67,8 @@ function displayBooks() {
 
             card_title.innerHTML = item.title;
             card_author.innerHTML = item.author;
-            card_pages.innerHTML = item.pages;
+            card_pages.innerHTML = item.pages + " pages";
+            card_read.innerHTML = item.read;
         })
     }
 }
@@ -93,12 +116,11 @@ function updateLibrary() {
 
 function deleteBook(event) {
 
-    console.log(event.target);
     let id_num = (event.target).dataset.idNumber;
 
     myLibrary.forEach((item) => {
         if (item.id == id_num) {
-            myLibrary.splice(myLibrary.indexOf(item) - 1, 1);
+            myLibrary.splice(myLibrary.indexOf(item), 1);
         }
 
     });
@@ -111,6 +133,7 @@ function deleteBook(event) {
     updateLibrary();
 
 }
+
 
 displayForm();
 displayBooks();
