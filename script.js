@@ -18,55 +18,49 @@ function addBookToLibrary(title, author, pages, read) {
 
 function displayBooks() {
 
-    const show_button = document.querySelector("#show");
-    const dialog = document.querySelector("dialog");
-
-
-    show_button.addEventListener("click", () => {
-
-        dialog.showModal();
-        displayForm();
-    })
-
     const disLib = document.querySelector(".container");
 
-    console.log(myLibrary);
+    if (myLibrary.length != 0) {
 
-    myLibrary.forEach((item) => {
+        myLibrary.forEach((item) => {
+            const card = document.createElement("div");
 
-        const card = document.createElement("div");
+            card.classList.add("card");
+            disLib.appendChild(card);
+            const card_title = document.createElement("h2");
+            card.appendChild(card_title);
+            const card_author = document.createElement("h4");
+            card.appendChild(card_author);
+            const card_pages = document.createElement("p");
+            card.appendChild(card_pages);
+            const delete_card = document.createElement("button");
+            card.appendChild(delete_card);
+            delete_card.innerHTML = `Delete Btn`;
+            delete_card.classList.add("del-btn");
+            delete_card.setAttribute("data-id-number", item.id);
 
-        card.classList.add("card");
-        disLib.appendChild(card);
-        const card_title = document.createElement("h2");
-        card.appendChild(card_title);
-        const card_author = document.createElement("h4");
-        card.appendChild(card_author);
-        const card_pages = document.createElement("p");
-        card.appendChild(card_pages);
-        const delete_card = document.createElement("button");
-        card.appendChild(delete_card);
-        delete_card.innerHTML = `Delete Btn`;
-        delete_card.classList.add("del-btn");
-        delete_card.setAttribute("data-id-number", item.id);
+            delete_card.addEventListener("click", (event) => {
+                deleteBook(event);
+            });
 
-        delete_card.addEventListener("click",deleteBook);
-
-        card_title.innerHTML = item.title;
-        card_author.innerHTML = item.author;
-        card_pages.innerHTML = item.pages;
-    })
-
-
-    
-
+            card_title.innerHTML = item.title;
+            card_author.innerHTML = item.author;
+            card_pages.innerHTML = item.pages;
+        })
+    }
 }
 
 function displayForm() {
 
     const dialog = document.querySelector("dialog");
     const close_button = document.querySelector("dialog > button");
+    const show_button = document.querySelector("#show");
 
+    show_button.addEventListener("click", () => {
+
+        dialog.showModal();
+
+    })
 
     close_button.addEventListener("click", () => {
         dialog.close();
@@ -80,11 +74,10 @@ function displayForm() {
         let author = document.querySelector("#author").value;
         let pages = document.querySelector("#pages").value;
         let read = document.querySelector("#read").value;
-         addBookToLibrary(title, author, pages, read);
-         updateLibrary();
-    })
+        addBookToLibrary(title, author, pages, read);
+        updateLibrary();
 
-    
+    })
 }
 
 function updateLibrary() {
@@ -98,30 +91,26 @@ function updateLibrary() {
     displayBooks();
 }
 
-function deleteBook() {
-    let deleteCard = document.querySelectorAll(".del-btn");
+function deleteBook(event) {
 
-    deleteCard.forEach((btn) => {
-        btn.addEventListener("click", (event) => {
-            console.log(event.target);
-            let id_num = (event.target).dataset.idNumber;
+    console.log(event.target);
+    let id_num = (event.target).dataset.idNumber;
 
-            myLibrary.forEach((item) => {
-                if (item.id == id_num) {
-                myLibrary.splice(myLibrary.indexOf(item) - 1, 1);
-                }
+    myLibrary.forEach((item) => {
+        if (item.id == id_num) {
+            myLibrary.splice(myLibrary.indexOf(item) - 1, 1);
+        }
 
-            });
+    });
 
-            const card_type = document.querySelectorAll(`[data-id-number="${id_num}"]`);
+    const card_type = document.querySelectorAll(`[data-id-number="${id_num}"]`);
 
-            card_type.forEach((card) => {
-                card.remove();
-            });
-            updateLibrary();
-        });
-    })
+    card_type.forEach((card) => {
+        card.remove();
+    });
+    updateLibrary();
+
 }
 
-
+displayForm();
 displayBooks();
