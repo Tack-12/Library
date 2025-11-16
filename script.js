@@ -1,21 +1,25 @@
 const myLibrary = [];
 
-function Book(title, author, pages, read) {
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    read ? this.read = "Already read" : this.read = "Not Read";
+class Book {
+
+    constructor(title, author, pages, read) {
+        this.id = crypto.randomUUID();
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        read ? this.read = "Already read" : this.read = "Not Read";
+    }
+
+    changeStatus() {
+        if (this.read == "Already read") {
+            this.read = "Not Read"
+        }
+        else {
+            this.read = "Already read"
+        }
+    }
 }
 
-Book.prototype.changeStatus = function(){
-    if (this.read == "Already read"){
-        this.read = "Not Read"
-    }
-    else{
-        this.read = "Already read"
-    }
-}
 
 function addBookToLibrary(title, author, pages, read) {
 
@@ -24,7 +28,7 @@ function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(book);
 }
 
-addBookToLibrary("title","auth",12,true)
+addBookToLibrary("title", "auth", 12, true)
 
 function displayBooks() {
 
@@ -54,8 +58,8 @@ function displayBooks() {
 
             change_readStatus = document.createElement("button");
             card.appendChild(change_readStatus);
-            change_readStatus.innerHTML="Change Read Status"
-            change_readStatus.addEventListener("click",()=>{
+            change_readStatus.innerHTML = "Change Read Status"
+            change_readStatus.addEventListener("click", () => {
                 item.changeStatus();
                 updateLibrary();
                 console.log(myLibrary);
